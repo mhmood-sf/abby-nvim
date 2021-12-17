@@ -1,0 +1,17 @@
+.ab	abby.txt	/*.ab*
+AbbyBugs	abby.txt	/*AbbyBugs*
+AbbyContents	abby.txt	/*AbbyContents*
+AbbyEat	abby.txt	/*AbbyEat*
+AbbyExpr	abby.txt	/*AbbyExpr*
+AbbyFiles	abby.txt	/*AbbyFiles*
+AbbyIntroduction	abby.txt	/*AbbyIntroduction*
+AbbyLicense	abby.txt	/*AbbyLicense*
+AbbyPrefix	abby.txt	/*AbbyPrefix*
+AbbySyntax	abby.txt	/*AbbySyntax*
+AbbyTrouble	abby.txt	/*AbbyTrouble*
+AbbyUsage	abby.txt	/*AbbyUsage*
+Eat()	abby.txt	/*Eat()*
+abby.txt	abby.txt	/*abby.txt*
+g:abby_dir	abby.txt	/*g:abby_dir*
+g:abby_prefix	abby.txt	/*g:abby_prefix*
+vim.g.abby_dir	abby.txt	/*vim.g.abby_dir*
