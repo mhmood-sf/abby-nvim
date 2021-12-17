@@ -137,10 +137,14 @@ period to be consumed after it is used to expand the abbreviation. See
 - If an abbreviation is not working properly, try running `:abbr` to see which
   abbreviations are registered for the current buffer
 
-- Popular plugins such as https://github.com/jiangmiao/auto-pairs can sometimes
-  interfere with abbreviations that use `Eat()` - this is likely due to the
-  mappings created by those plugins. Consider remapping them to different
-  keys, or removing `Eat()` from your abbreviation.
+- When using abbreviations, be careful about possible mappings you (or a
+  plugin) may have that might get triggered when the abbreviation is expanded.
+  This may lead to unexpected behaviour.
+
+- If you are getting strange "Not an editor command" errors, it's likely one
+  of your abbreviations contains a bar ("|") character somewhere, which Vim
+  uses to chain Ex commands. You can fix this by escaping the bar with
+  a slash: "\|"
 
 ===============================================================================
 4. Bugs                                                              *AbbyBugs*
