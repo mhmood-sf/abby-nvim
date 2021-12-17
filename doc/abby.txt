@@ -1,0 +1,154 @@
+*abby.txt* easily manage vim abbreviations
+
+                   __        __                     ~
+                  |  \      |  \                    ~
+          ______  | ▓▓____  | ▓▓____   __    __     ~
+         |      \ | ▓▓    \ | ▓▓    \ |  \  |  \    ~
+          \▓▓▓▓▓▓\| ▓▓▓▓▓▓▓\| ▓▓▓▓▓▓▓\| ▓▓  | ▓▓    ~
+         /      ▓▓| ▓▓  | ▓▓| ▓▓  | ▓▓| ▓▓  | ▓▓    ~
+        |  ▓▓▓▓▓▓▓| ▓▓__/ ▓▓| ▓▓__/ ▓▓| ▓▓__/ ▓▓    ~
+         \▓▓    ▓▓| ▓▓    ▓▓| ▓▓    ▓▓ \▓▓    ▓▓    ~
+          \▓▓▓▓▓▓▓ \▓▓▓▓▓▓▓  \▓▓▓▓▓▓▓  _\▓▓▓▓▓▓▓    ~
+                                      |  \__| ▓▓    ~
+                                       \▓▓    ▓▓    ~
+                                        \▓▓▓▓▓▓     ~
+
+      abby: a better experience with vim abbreviations!
+
+===============================================================================
+CONTENTS                                                         *AbbyContents*
+
+    1. Introduction ...................... |AbbyIntroduction|
+    2. Usage ............................. |AbbyUsage|
+        2.1 .ab Files .................... |AbbyFiles|
+        2.2 Syntax ....................... |AbbySyntax|
+        2.3 expr ......................... |AbbyExpr|
+        2.4 Prefix ....................... |AbbyPrefix|
+        2.5 Eat() ........................ |AbbyEat|
+    3. Troubleshooting ................... |AbbyTrouble|
+    4. Bugs .............................. |AbbyBugs|
+    5. License ........................... |AbbyLicense|
+
+===============================================================================
+1. Introduction                                              *AbbyIntroduction*
+
+abby is a plugin for organizing and managing vim abbreviations (see
+`:h abbreviations`). It can be particularly useful for longer and more complex
+abbreviations, and can even be used as a lightweight alternative to
+snippet engines!
+
+===============================================================================
+2. Usage                                                            *AbbyUsage*
+                                                  *vim.g.abby_dir* *g:abby_dir*
+
+You first need a directory to store your .ab files, which will contain
+filetype-specific abbreviations. The default location is the `abby/` directory,
+inside your vim config directory (as given by `stdpath('config')`). To change
+this, you can set the `g:abby_dir` variable to whichever directory you
+wish to use instead.
+
+-------------------------------------------------------------------------------
+2.1 .ab Files                                                       *AbbyFiles*
+                                                                          *.ab*
+
+In the `g:abby_dir` directory, you can create `<filetype>.ab` files. All
+abbreviations in this file will be loaded and available (locally) when a
+buffer of that filetype is opened. The special file `_default.snip` can be
+used for abbreviations that will always be loaded, and available globally.
+
+-------------------------------------------------------------------------------
+2.2 Syntax                                                         *AbbySyntax*
+
+Below is an example of the syntax for defining abbreviations in an .ab file:
+>
+    # comment
+    abbr psvm {
+    public static void main()<Left>
+    }
+<
+The keyword 'abbr' is used to define an abbreviation, followed by its name,
+and then the expansion for the abbreviation enclosed within curly braces.
+Note the use of `<Left>` - these snips are just to translated to vim's
+built-in abbreviations, which means everything you're allowed to do inside
+the `:abbreviate` command, you're allowed to do here as well.
+See `:h abbreviate` and `:h abbreviations` for more.
+
+-------------------------------------------------------------------------------
+2.3 expr                                                             *AbbyExpr*
+
+You can also use the 'expr' keyword instead of 'abbr' to create
+abbreviations where the expansion is a vimscript expression. When the
+abbreviation is expanded, this expression will be evaluated and its result
+will be used as the expansion instead:
+>
+    # shows the current time, in HH:MM format
+    expr time {
+    strftime('%H:%M')
+    }
+<
+-------------------------------------------------------------------------------
+2.4 Prefix                                                         *AbbyPrefix*
+                                                                *g:abby_prefix*
+
+To make abbreviations more manageable, all names are prefixed with a specific
+character when the abbreviation is registered. The default prefix is '0', so
+the abbreviation in the example above would be expanded after typing '0time',
+and then a space (or any other non-keyword character). You can specify your own
+prefix by setting the `g:snip_prefix` variable. Note that the prefix must be a
+keyword character, otherwise the abbreviation may not function properly (see
+`:h iskeyword` and `:h abbreviations` for more).
+
+-------------------------------------------------------------------------------
+2.5 Eat()                                                             *AbbyEat*
+                                                                        *Eat()*
+
+When abbreviations are expanded, the non-keyword character that triggered the
+expansion is also inserted into the buffer. This can sometimes be inconvenient.
+The `Eat()` vimscript function is provided to solve this by consuming the
+character that triggered the expansion. For `abbr` abbreviations, simply
+append `<C-R>=Eat()<CR>` to the end of the expansion:
+>
+    # consume expansion character
+    abbr hw {
+    Hello, World<C-R>=Eat()<CR>
+    }
+<
+For `expr` abbreviations, simply concatenate the expression with `Eat()` (make
+sure the result of your expression is a string):
+>
+    # consume expansion character
+    expr time {
+    strftime('%H:%M') . Eat()
+    }
+<
+`Eat()` can also take one optional argument: the pattern matched when checking
+whether to consume the character or not. By default, this is set to `'\s'`, which
+matches all whitespace, but could be, for example, `'\.'` if you only want a
+period to be consumed after it is used to expand the abbreviation. See
+`:h abbreviations` for more.
+
+===============================================================================
+3. Troubleshooting                                                *AbbyTrouble*
+
+- Some abbreviations may not register properly if they contain non-keyword
+  characters, due to how vim handles abbreviation names. See `:h abbreviations`
+  for more.
+
+- If an abbreviation is not working properly, try running `:abbr` to see which
+  abbreviations are registered for the current buffer
+
+- Popular plugins such as https://github.com/jiangmiao/auto-pairs can sometimes
+  interfere with abbreviations that use `Eat()` - this is likely due to the
+  mappings created by those plugins. Consider remapping them to different
+  keys, or removing `Eat()` from your abbreviation.
+
+===============================================================================
+4. Bugs                                                              *AbbyBugs*
+
+Issue tracker: https://github.com/quintik/abby-nvim/issues
+
+===============================================================================
+5. License                                                        *AbbyLicense*
+
+MIT License: https://github.com/quintik/abby-nvim/blob/master/LICENSE
+
