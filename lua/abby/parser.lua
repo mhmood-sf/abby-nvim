@@ -112,7 +112,9 @@ local function tokenize(raw_src)
             scan_block(state)
         -- '#' starts a comment.
         elseif char == "#" then
-            while cur_item(state) ~= "\n" and consumed(state) do
+            -- Newline character
+            local NL = vim.fn.nr2char(10)
+            while not (cur_item(state) == NL or consumed(state)) do
                 advance(state)
             end
         -- Ignore whitespace.
