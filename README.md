@@ -1,4 +1,3 @@
 # abby
 
-***better experience with vim abbreviations.***
-
+a better experience with vim abbreviations.
