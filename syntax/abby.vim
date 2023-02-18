@@ -23,7 +23,7 @@ syn region abbyCharKey start=/</       end=/>/          contains=abbyEsc contain
 syn region abbyNMode   start=/<Esc>/   end=/[iaoIAOSC]/ contains=abbyCharKey
 
 " start with {, skip nested {..}, end with }, use '\{-}' for non-greedy match
-syn region abbyBlock start=/{/hs=s+1 skip=/{.\{-}}/ end=/}/he=e-1 contains=ALLBUT,abbyKeywords,abbyIdent
+syn region abbyBlock start=/{/hs=s+1 skip=/{.\{-}}/ end=/}/he=e-1 contains=ALLBUT,abbyKeywords,abbyIdent,abbyComment
 
 hi def link abbyKeywords  Statement
 hi def link abbyIdent     Identifier
